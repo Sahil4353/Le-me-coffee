@@ -1,0 +1,97 @@
+PRAGMA foreign_keys = on;
+
+Create table users(
+users_id integer NOT NULL Primary Key AUTOINCREMENT,
+username text NOT NULL,
+email text,
+user_admin integer DEFAULT 0
+);
+
+Create table storeUsers(
+users_id integer DEFAULT 1,
+store_id integer DEFAULT 1,
+foreign key (users_id) references users(users_id),
+foreign key (store_id) references stores(store_id)
+);
+
+Create table stores(
+store_id integer NOT NULL Primary Key,
+name text NOT NULL UNIQUE,
+owner text
+);
+
+Create table products(
+product_id integer NOT NULL Primary Key,
+name text NOT NULL,
+stock integer NOT NULL,
+created_date NOT NULL,
+price real NOT NULL,
+store_id integer DEFAULT 1,
+foreign key (store_id) references stores(store_id)
+);
+
+Create table orderItems(
+product_id integer NOT NULL,
+order_id integer NOT NULL,
+quantity integer DEFAULT 1,
+note text,
+foreign key (product_id) references products(product_id),
+foreign key (order_id) references orders(order_id)
+);
+
+Create table orders(
+order_id integer NOT NULL Primary Key,
+payment_status text NOT NULL,
+created_date NOT NULL,
+users_id integer,
+foreign key (users_id) references users (users_id)
+);
+
+.mode columns
+.headers on
+
+insert into users(username, email, user_admin) values
+("Sahil", "sahil@123.com", 0),
+("Nikita", "nikita@123.com", 0),
+("Yash", "yash@123.com", 0),
+("Ahmed", "ahmed@123.com", 0),
+("Siavansh", "sia@123.com", 0);
+
+insert into stores(store_id, name, owner) values
+(17, "Le Coffee Me", "Sandip");
+
+insert into products(product_id, name, stock, created_date, price, store_id) values
+(001, "Coffee", 30, "17-02-2023", 6, 17),
+(002, "Americano", 10, "10-02-2023", 12, 17),
+(003, "Cookies", 45, "19-02-2023", 3, 17),
+(004, "Filtro", 9, "11-02-2023", 5, 17),
+(005, "Doppio", 12, "15-02-2023", 10, 17);
+
+insert into orders(order_id, payment_status, created_date, users_id) values
+(23, "True", "17-02-2023", 1),
+(24, "True", "10-02-2023", 2),
+(25, "True", "19-02-2023", 2),
+(26, "True", "11-02-2023", 3),
+(27, "True", "15-02-2023", 5);
+
+insert into storeUsers(store_id) values
+(17),
+(17),
+(17),
+(17),
+(17);
+
+insert into orderItems(product_id, order_id, quantity, note) values
+(001, 23, 15, "Extra Milk"),
+(002, 24, 10, "Extra Chocolate"),
+(003, 25, 2, "Extra Cookies"),
+(004, 26, 8, "Extra Powder"),
+(005, 27, 5, "");
+
+select * from users;
+select * from storeUsers;
+select * from stores;
+select * from products;
+select * from orderItems;
+select * from orders;
+
